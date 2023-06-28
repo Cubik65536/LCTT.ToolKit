@@ -1,12 +1,11 @@
 import java.io.ByteArrayOutputStream
 import java.io.FileInputStream
-import java.time.format.DateTimeFormatter
-import java.time.ZonedDateTime
 import java.time.ZoneId
-import java.util.Properties
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.distsDirectory
 
 val ktorVersion: String by project
 val cliktVersion: String by project
