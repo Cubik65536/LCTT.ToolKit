@@ -2,6 +2,8 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 val ktorVersion: String by project
 val cliktVersion: String by project
+val hopliteVersion: String by project
+
 plugins {
     kotlin("jvm") version "1.8.21"
     application
@@ -16,9 +18,14 @@ repositories {
 }
 
 dependencies {
+    // HTTP client
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-java:$ktorVersion")
+    // CLI parser
     implementation("com.github.ajalt.clikt:clikt:$cliktVersion")
+    // Configurations Loader
+    implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
+    implementation("com.sksamuel.hoplite:hoplite-yaml:$hopliteVersion")
 }
 
 kotlin {
