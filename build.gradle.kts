@@ -1,4 +1,5 @@
 val ktorVersion: String by project
+val cliktVersion: String by project
 
 plugins {
     kotlin("jvm") version "1.8.21"
@@ -15,6 +16,7 @@ repositories {
 dependencies {
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
+    implementation("com.github.ajalt.clikt:clikt:$cliktVersion")
 }
 
 kotlin {
