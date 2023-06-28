@@ -1,3 +1,3 @@
 
-rootProject.name = "LCTT-ToolKit"
+rootProject.name = "LCTT.ToolKit"
 
