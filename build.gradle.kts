@@ -1,9 +1,11 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 val ktorVersion: String by project
 val cliktVersion: String by project
-
 plugins {
     kotlin("jvm") version "1.8.21"
     application
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "tech.ixor"
@@ -25,4 +27,11 @@ kotlin {
 
 application {
     mainClass.set("MainKt")
+}
+
+tasks {
+    named<ShadowJar>("shadowJar") {
+        archiveBaseName.set("LCTT.Toolkit")
+        mergeServiceFiles()
+    }
 }
