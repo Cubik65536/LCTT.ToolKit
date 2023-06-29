@@ -1,0 +1,4 @@
+GITHUB_ID: "your_github_id"
+GITHUB_TOKEN: "your_github_personal_access_token"
+
+REPO_PATH: "path/to/TranslateProject"
