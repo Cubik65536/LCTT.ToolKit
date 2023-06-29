@@ -10,6 +10,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 val ktorVersion: String by project
 val cliktVersion: String by project
 val hopliteVersion: String by project
+val klaxonVersion: String by project
 val slf4jVersion: String by project
 
 val versionPropertiesFile = "${projectDir}/version.properties"
@@ -102,6 +103,8 @@ dependencies {
     // Configurations Loader
     implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
     implementation("com.sksamuel.hoplite:hoplite-yaml:$hopliteVersion")
+    // JSON Parser
+    implementation("com.beust:klaxon:$klaxonVersion")
     // Logging
     implementation("org.slf4j:slf4j-simple:$slf4jVersion")
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
