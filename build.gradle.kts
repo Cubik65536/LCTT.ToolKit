@@ -100,6 +100,8 @@ dependencies {
     implementation("io.ktor:ktor-client-java:$ktorVersion")
     // CLI parser
     implementation("com.github.ajalt.clikt:clikt:$cliktVersion")
+    // Shell Command Executor
+    implementation("com.lordcodes.turtle:turtle:0.8.0")
     // Configurations Loader
     implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
     implementation("com.sksamuel.hoplite:hoplite-yaml:$hopliteVersion")
