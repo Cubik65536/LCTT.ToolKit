@@ -1,4 +1,4 @@
-import Entity.ConfigEntity
+import entity.ConfigEntity
 import io.ktor.client.*
 import io.ktor.client.engine.java.*
 import io.ktor.client.request.*
