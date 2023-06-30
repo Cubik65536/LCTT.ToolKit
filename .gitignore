@@ -80,3 +80,6 @@ fabric.properties
 
 # Private Configurations
 conf/
+
+# Log files
+*.log

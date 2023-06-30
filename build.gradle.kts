@@ -11,7 +11,7 @@ val ktorVersion: String by project
 val cliktVersion: String by project
 val hopliteVersion: String by project
 val klaxonVersion: String by project
-val slf4jVersion: String by project
+val logbackVersion: String by project
 
 val versionPropertiesFile = "${projectDir}/version.properties"
 
@@ -107,8 +107,7 @@ dependencies {
     // JSON Parser
     implementation("com.beust:klaxon:$klaxonVersion")
     // Logging
-    implementation("org.slf4j:slf4j-simple:$slf4jVersion")
-    implementation("org.slf4j:slf4j-api:$slf4jVersion")
+    implementation("ch.qos.logback:logback-classic:$logbackVersion")
 }
 
 kotlin {
