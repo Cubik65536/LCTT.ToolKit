@@ -1,4 +1,56 @@
-GITHUB_ID: "your_github_id"
-GITHUB_TOKEN: "your_github_personal_access_token"
+# Do NOT modify the version value below.
+# 不要修改下面的版本值
+version: 0.1.0
 
-REPO_PATH: "path/to/TranslateProject"
+# Configure the following items according to your needs.
+# 根据你的需要配置下面的项目
+github:
+  github_id: "your_github_id"
+  github_token: "your_github_personal_access_token"
+  repo_path: "path/to/TranslateProject"
+
+editor: "vscode" # 支持的编辑器有：vim, nvim, emacs, vscode, vscode-insiders 与 sublime-text
+
+# Do NOT modify the following items unless you know what you are doing.
+# 不要修改下面的项目，除非你知道你在做什么
+category:
+  - "news"
+  - "talk"
+  - "tech"
+
+upstream:
+  remote: "https://github.com/LCTT/TranslateProject"
+  branch: "master"
+
+git:
+  branch:
+    name: "{action}-{category}-{filename}"
+    action:
+      collect: "collect"
+      apply: "apply"
+      translate: "translate"
+      fix: "fix"
+
+  commit:
+    message: "[{action}][{category}]: {filename}"
+    action:
+      collect: "手动选题"
+      apply: "翻译申请"
+      translate: "提交翻译"
+      fix: "修正翻译"
+
+  pull_request:
+    title: "[{action}][{category}]: {filename}"
+    body: |
+      This article is {status} by {user}.
+      This pull request is created using [LCTT.ToolKit](https://github.com/Cubik65536/LCTT-ToolKit).
+    action:
+      collect: "手动选题"
+      apply: "翻译申请"
+      translate: "提交翻译"
+      fix: "修正翻译"
+    status:
+      collect: "collected"
+      apply: "being translated"
+      translate: "translated"
+      fix: "fixed"
