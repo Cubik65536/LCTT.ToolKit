@@ -1,6 +1,8 @@
 package entity
 
 import com.sksamuel.hoplite.ConfigLoader
+import com.sksamuel.hoplite.ConfigLoaderBuilder
+import com.sksamuel.hoplite.sources.InputStreamPropertySource
 import config.*
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -21,7 +23,7 @@ class ConfigEntity {
 
     fun loadConfig(): Config {
         val pwd = File(this::class.java.protectionDomain.codeSource.location.toURI()).parentFile.parentFile.path
-        val defaultConfig = this::class.java.getResource("/conf/config.yaml")!!.toURI()
+        val defaultConfig = this::class.java.getResourceAsStream("/conf/config.yaml")
         val configFilePath = "$pwd/conf/config.yaml"
         val configFile = File(configFilePath)
 
@@ -31,12 +33,15 @@ class ConfigEntity {
             logger.error("Config file not found!")
             logger.info("Creating config file...")
             configFile.parentFile.mkdirs()
-            File(defaultConfig).copyTo(configFile)
+            defaultConfig!!.copyTo(configFile.outputStream())
             logger.info("New config file created! Please edit it and run the program again.")
             exitProcess(1)
         }
 
-        val default = ConfigLoader().loadConfigOrThrow<Config>(defaultConfig.path)
+        val default = ConfigLoaderBuilder.default()
+                      .addPropertySource(InputStreamPropertySource(defaultConfig!!, "yml", "default"))
+                      .build()
+                      .loadConfigOrThrow<Config>()
         val user = ConfigLoader().loadConfigOrThrow<Config>(configFilePath)
 
         if (default.version != user.version) {

@@ -1,18 +1,23 @@
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.subcommands
 import entity.ConfigEntity
-import io.ktor.client.*
-import io.ktor.client.engine.java.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
+import org.slf4j.LoggerFactory
 
-suspend fun main() {
-    val config = ConfigEntity().loadConfig()
-
-    val client = HttpClient(Java) {
-        engine {
-            protocolVersion = java.net.http.HttpClient.Version.HTTP_2
-        }
-    }
-    val response: HttpResponse = client.get("https://ktor.io/")
-    println(response.status)
-    client.close()
+class LCTTToolKit: CliktCommand() {
+    override fun run() = Unit
+    override fun aliases(): Map<String, List<String>> = mapOf(
+            "i" to listOf("init"),
+    )
 }
+
+class Init: CliktCommand(name = "init", help = "Initialize the LCTT ToolKit") {
+    private val logger = LoggerFactory.getLogger(javaClass)
+    override fun run() {
+        val config = ConfigEntity().loadConfig()
+        logger.info("Initializing the LCTT ToolKit...")
+    }
+}
+
+fun main(args: Array<String>) = LCTTToolKit()
+    .subcommands(Init())
+    .main(args)
