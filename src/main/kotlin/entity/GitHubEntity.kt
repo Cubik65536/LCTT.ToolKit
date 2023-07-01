@@ -2,6 +2,7 @@ package entity
 
 import com.beust.klaxon.Klaxon
 import config.GitHubConfig
+import config.UpstreamConfig
 import io.ktor.client.request.*
 import io.ktor.http.*
 import org.slf4j.LoggerFactory
@@ -64,7 +65,7 @@ class GitHubEntity (private val config: GitHubConfig) {
         logger.info("Fork created.")
     }
 
-    fun checkRepo(): Boolean {
+    fun checkRepo(upstream: UpstreamConfig): Boolean {
         val url = "${GITHUB_API_URL}/repos/${config.githubID}/${config.repoName}"
 
         val response = HttpUtil().GetRequests().getBodyJSON(url) {
@@ -89,7 +90,7 @@ class GitHubEntity (private val config: GitHubConfig) {
             logger.trace("Repository ${config.repoName} is a fork.")
         }
 
-        if (response.obj("parent")!!.string("full_name").toString() != "LCTT/TranslateProject") {
+        if (response.obj("parent")!!.string("full_name").toString() != upstream.name) {
             logger.error("Repository ${config.repoName} is not a fork of LCTT/TranslateProject.")
             return false
         } else {

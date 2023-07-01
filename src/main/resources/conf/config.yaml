@@ -19,6 +19,7 @@ category:
   - "tech"
 
 upstream:
+  name: "LCTT/TranslateProject"
   remote: "https://github.com/LCTT/TranslateProject"
   branch: "master"
 
