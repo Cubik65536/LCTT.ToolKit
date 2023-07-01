@@ -14,7 +14,7 @@ class ConfigEntity {
 
     data class Config (
         val version: String,
-        val github: GithubConfig,
+        val github: GitHubConfig,
         val editor: String,
         val category: List<String>,
         val upstream: UpstreamConfig,
