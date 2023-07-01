@@ -1,6 +1,9 @@
 package entity
 
+import com.beust.klaxon.JsonArray
+import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Klaxon
+import com.beust.klaxon.Parser
 import config.GitHubConfig
 import config.UpstreamConfig
 import io.ktor.client.request.*
@@ -32,10 +35,36 @@ class GitHubEntity (private val config: GitHubConfig) {
         return config.githubID == getAuthUser()
     }
 
-    fun createFork() {
-        logger.info("Creating fork of LCTT/TranslateProject...")
+    private fun getOwnFork(url: String): List<JsonObject> {
+        val response = HttpUtil().GetRequests().getBody(url) {
+            accept(ContentType("application", "vnd.github+json"))
+            bearerAuth(config.githubToken)
+            headers {
+                append("X-GitHub-Api-Version", "2022-11-28")
+            }
+        }
 
-        val url = "${GITHUB_API_URL}/repos/LCTT/TranslateProject/forks"
+        val parser: Parser = Parser.default()
+        val stringBuilder: StringBuilder = StringBuilder(response)
+        @Suppress("UNCHECKED_CAST")
+        val repos = parser.parse(stringBuilder) as JsonArray<JsonObject>
+        return repos.filter {
+            it.obj("owner")?.string("login") == config.githubID
+        }
+    }
+
+    fun createFork(upstream: UpstreamConfig) {
+        val url = "${GITHUB_API_URL}/repos/${upstream.name}/forks"
+
+        val existedFork = getOwnFork(url)
+        if (existedFork.isNotEmpty()) {
+            logger.info("You have already forked ${upstream.name}." +
+                    "Name of the fork: \"${existedFork[0].string("name")}\". " +
+                    "Please change the repo_name in configuration file to the name of the fork.")
+            exitProcess(1)
+        }
+
+        logger.info("Creating fork of ${upstream.name}...")
 
         val response = HttpUtil().PostRequests().request(url) {
             accept(ContentType("application", "vnd.github+json"))
@@ -56,9 +85,9 @@ class GitHubEntity (private val config: GitHubConfig) {
 
         logger.debug(response.toString())
 
-        if (response.status.value != 202) {
+        if (response.status.value != 202 || !checkRepo(upstream)) {
             logger.error("Failed to create fork.")
-            logger.info("Please check your GitHub token configuration or create a fork of LCTT/TranslateProject.")
+            logger.info("Please check your GitHub token and repo configurations or create a fork of ${upstream.name} manually.")
             exitProcess(1)
         }
 
@@ -91,10 +120,10 @@ class GitHubEntity (private val config: GitHubConfig) {
         }
 
         if (response.obj("parent")!!.string("full_name").toString() != upstream.name) {
-            logger.error("Repository ${config.repoName} is not a fork of LCTT/TranslateProject.")
+            logger.error("Repository ${config.repoName} is not a fork of ${upstream.name}.")
             return false
         } else {
-            logger.trace("Repository ${config.repoName} is a fork of LCTT/TranslateProject.")
+            logger.trace("Repository ${config.repoName} is a fork of ${upstream.name}.")
         }
 
         logger.info("Repository configuration verified.")
