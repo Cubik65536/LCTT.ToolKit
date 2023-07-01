@@ -1,13 +1,13 @@
 # Do NOT modify the version value below.
 # 不要修改下面的版本值
-version: 0.1.0
+version: 0.1.1
 
 # Configure the following items according to your needs.
 # 根据你的需要配置下面的项目
 github:
   github_id: "your_github_id"
   github_token: "your_github_personal_access_token"
-  repo_path: "path/to/TranslateProject"
+  repo_name: "your_repo_name"
 
 editor: "vscode" # 支持的编辑器有：vim, nvim, emacs, vscode, vscode-insiders 与 sublime-text
 
