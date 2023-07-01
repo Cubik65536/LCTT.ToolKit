@@ -32,6 +32,8 @@ class GitHubEntity (private val config: GitHubConfig) {
     }
 
     private fun createFork() {
+        logger.info("Creating fork of LCTT/TranslateProject...")
+
         val url = "${GITHUB_API_URL}/repos/LCTT/TranslateProject/forks"
 
         val response = HttpUtil().PostRequests().request(url) {
@@ -44,13 +46,14 @@ class GitHubEntity (private val config: GitHubConfig) {
             setBody(
                 Klaxon().toJsonString(
                     mapOf(
-                        "organization" to config.githubID,
                         "name" to config.repoName,
                         "default_branch_only" to true
                     )
                 )
             )
         }
+
+        logger.debug(response.toString())
 
         if (response.status.value != 202) {
             logger.error("Failed to create fork.")
