@@ -39,4 +39,22 @@ class HttpUtil {
             return parser.parse(stringBuilder) as JsonObject
         }
     }
+
+    inner class PostRequests {
+        fun postBody(url: String, requestBuilder: HttpRequestBuilder.() -> Unit = {}): String {
+            logger.debug("POST $url")
+            val httpResponseBody: String
+            runBlocking {
+                httpResponseBody = httpClient.post(url, requestBuilder).bodyAsText()
+            }
+            logger.debug("Response: $httpResponseBody")
+            return httpResponseBody
+        }
+
+        fun postBodyJSON(url: String, requestBuilder: HttpRequestBuilder.() -> Unit = {}): JsonObject {
+            val parser: Parser = Parser.default()
+            val stringBuilder: StringBuilder = StringBuilder(postBody(url, requestBuilder))
+            return parser.parse(stringBuilder) as JsonObject
+        }
+    }
 }
