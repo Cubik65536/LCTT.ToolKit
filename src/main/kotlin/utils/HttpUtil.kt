@@ -6,6 +6,7 @@ import io.ktor.client.*
 import io.ktor.client.engine.java.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
+import kotlinx.coroutines.runBlocking
 import java.net.http.HttpClient
 
 class HttpUtil {
@@ -18,14 +19,19 @@ class HttpUtil {
         }
     }
 
-    suspend fun get(url: String, requestBuilder: HttpRequestBuilder.() -> Unit = {}): String {
-        val httpResponse: HttpResponse = httpClient.get(url, requestBuilder)
-        return httpResponse.bodyAsText()
-    }
+    inner class GetRequests {
+        fun getBody(url: String, requestBuilder: HttpRequestBuilder.() -> Unit = {}): String {
+            val httpResponseBody: String
+            runBlocking {
+                httpResponseBody = httpClient.get(url, requestBuilder).bodyAsText()
+            }
+            return httpResponseBody
+        }
 
-    suspend fun getJSON(url: String, requestBuilder: HttpRequestBuilder.() -> Unit = {}): JsonObject {
-        val parser: Parser = Parser.default()
-        val stringBuilder: StringBuilder = StringBuilder(get(url, requestBuilder))
-        return parser.parse(stringBuilder) as JsonObject
+        fun getBodyJSON(url: String, requestBuilder: HttpRequestBuilder.() -> Unit = {}): JsonObject {
+            val parser: Parser = Parser.default()
+            val stringBuilder: StringBuilder = StringBuilder(getBody(url, requestBuilder))
+            return parser.parse(stringBuilder) as JsonObject
+        }
     }
 }
