@@ -23,13 +23,21 @@ class HttpUtil {
     }
 
     inner class GetRequests {
-        fun getBody(url: String, requestBuilder: HttpRequestBuilder.() -> Unit = {}): String {
+        fun request(url: String, requestBuilder: HttpRequestBuilder.() -> Unit = {}): HttpResponse {
             logger.debug("GET $url")
+            val httpResponse: HttpResponse
+            runBlocking {
+                httpResponse = httpClient.get(url, requestBuilder)
+            }
+            logger.debug("Response: {}", httpResponse)
+            return httpResponse
+        }
+
+        fun getBody(url: String, requestBuilder: HttpRequestBuilder.() -> Unit = {}): String {
             val httpResponseBody: String
             runBlocking {
-                httpResponseBody = httpClient.get(url, requestBuilder).bodyAsText()
+                httpResponseBody = request(url, requestBuilder).bodyAsText()
             }
-            logger.debug("Response: $httpResponseBody")
             return httpResponseBody
         }
 
@@ -41,19 +49,27 @@ class HttpUtil {
     }
 
     inner class PostRequests {
-        fun postBody(url: String, requestBuilder: HttpRequestBuilder.() -> Unit = {}): String {
+        fun request(url: String, requestBuilder: HttpRequestBuilder.() -> Unit = {}): HttpResponse {
             logger.debug("POST $url")
+            val httpResponse: HttpResponse
+            runBlocking {
+                httpResponse = httpClient.post(url, requestBuilder)
+            }
+            logger.debug("Response: {}", httpResponse)
+            return httpResponse
+        }
+
+        fun getBody(url: String, requestBuilder: HttpRequestBuilder.() -> Unit = {}): String {
             val httpResponseBody: String
             runBlocking {
-                httpResponseBody = httpClient.post(url, requestBuilder).bodyAsText()
+                httpResponseBody = request(url, requestBuilder).bodyAsText()
             }
-            logger.debug("Response: $httpResponseBody")
             return httpResponseBody
         }
 
-        fun postBodyJSON(url: String, requestBuilder: HttpRequestBuilder.() -> Unit = {}): JsonObject {
+        fun getBodyJSON(url: String, requestBuilder: HttpRequestBuilder.() -> Unit = {}): JsonObject {
             val parser: Parser = Parser.default()
-            val stringBuilder: StringBuilder = StringBuilder(postBody(url, requestBuilder))
+            val stringBuilder: StringBuilder = StringBuilder(getBody(url, requestBuilder))
             return parser.parse(stringBuilder) as JsonObject
         }
     }

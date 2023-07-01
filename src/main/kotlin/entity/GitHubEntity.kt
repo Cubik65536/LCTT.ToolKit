@@ -1,5 +1,6 @@
 package entity
 
+import com.beust.klaxon.Klaxon
 import config.GitHubConfig
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -11,10 +12,6 @@ const val GITHUB_API_URL = "https://api.github.com"
 
 class GitHubEntity (private val config: GitHubConfig) {
     private val logger = LoggerFactory.getLogger(javaClass)
-
-    fun verifyUser(): Boolean {
-        return config.githubID == getAuthUser()
-    }
 
     private fun getAuthUser(): String {
         val url = "${GITHUB_API_URL}/user"
@@ -30,6 +27,40 @@ class GitHubEntity (private val config: GitHubConfig) {
         return response.string("login").toString()
     }
 
+    fun verifyUser(): Boolean {
+        return config.githubID == getAuthUser()
+    }
+
+    private fun createFork() {
+        val url = "${GITHUB_API_URL}/repos/LCTT/TranslateProject/forks"
+
+        val response = HttpUtil().PostRequests().request(url) {
+            accept(ContentType("application", "vnd.github+json"))
+            bearerAuth(config.githubToken)
+            headers {
+                append("X-GitHub-Api-Version", "2022-11-28")
+            }
+            contentType(ContentType.Application.Json)
+            setBody(
+                Klaxon().toJsonString(
+                    mapOf(
+                        "organization" to config.githubID,
+                        "name" to config.repoName,
+                        "default_branch_only" to true
+                    )
+                )
+            )
+        }
+
+        if (response.status.value != 202) {
+            logger.error("Failed to create fork.")
+            logger.info("Please check your GitHub token configuration or create a fork of LCTT/TranslateProject.")
+            exitProcess(1)
+        }
+
+        logger.info("Fork created.")
+    }
+
     fun checkRepo() {
         val url = "${GITHUB_API_URL}/repos/${config.githubID}/${config.repoName}"
 
@@ -43,7 +74,7 @@ class GitHubEntity (private val config: GitHubConfig) {
 
         if (response.string("name").toString() != config.repoName) {
             logger.error("Repository ${config.repoName} does not exist.")
-            // TODO: Create a fork of LCTT/TranslateProject with the same name as config.repoName
+            createFork()
             return
         } else {
             logger.trace("Repository ${config.repoName} exists.")
