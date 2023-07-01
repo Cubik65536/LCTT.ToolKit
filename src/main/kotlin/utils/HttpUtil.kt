@@ -7,9 +7,12 @@ import io.ktor.client.engine.java.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import kotlinx.coroutines.runBlocking
+import org.slf4j.LoggerFactory
 import java.net.http.HttpClient
 
 class HttpUtil {
+    private val logger = LoggerFactory.getLogger(javaClass)
+
     private val httpClient = HttpClient(Java) {
         engine {
             // this: JavaHttpConfig
@@ -21,10 +24,12 @@ class HttpUtil {
 
     inner class GetRequests {
         fun getBody(url: String, requestBuilder: HttpRequestBuilder.() -> Unit = {}): String {
+            logger.debug("GET $url")
             val httpResponseBody: String
             runBlocking {
                 httpResponseBody = httpClient.get(url, requestBuilder).bodyAsText()
             }
+            logger.debug("Response: $httpResponseBody")
             return httpResponseBody
         }
 

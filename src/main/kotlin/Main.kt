@@ -26,6 +26,7 @@ class Init: CliktCommand(name = "init", help = "Initialize the LCTT ToolKit") {
             logger.error("Please check your GitHub ID and token.")
             exitProcess(1)
         }
+        gitHubEntity.checkRepo()
     }
 }
 
