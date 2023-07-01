@@ -5,9 +5,9 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import utils.HttpUtil
 
-class GitHubEntity (private val config: GitHubConfig) {
-    private val GITHUB_API_URL = "https://api.github.com"
+const val GITHUB_API_URL = "https://api.github.com"
 
+class GitHubEntity (private val config: GitHubConfig) {
     fun verifyUser(): Boolean {
         return config.githubID == getAuthUser()
     }
