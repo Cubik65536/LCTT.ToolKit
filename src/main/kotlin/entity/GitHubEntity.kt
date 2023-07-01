@@ -41,26 +41,30 @@ class GitHubEntity (private val config: GitHubConfig) {
             }
         }
 
-        if (response.string("name").toString() == config.repoName) {
-            logger.info("Repository ${config.repoName} exists.")
-        } else {
+        if (response.string("name").toString() != config.repoName) {
             logger.error("Repository ${config.repoName} does not exist.")
             // TODO: Create a fork of LCTT/TranslateProject with the same name as config.repoName
             return
+        } else {
+            logger.trace("Repository ${config.repoName} exists.")
         }
 
         if (response.boolean("fork") != true) {
             logger.error("Repository ${config.repoName} is not a fork.")
             logger.info("Please check your repository name configuration or fork the LCTT/TranslateProject.")
             exitProcess(1)
+        } else {
+            logger.trace("Repository ${config.repoName} is a fork.")
         }
 
-        if (response.obj("parent")!!.string("full_name").toString() == "LCTT/TranslateProject") {
-            logger.info("Repository ${config.repoName} is a fork of LCTT/TranslateProject.")
-        } else {
+        if (response.obj("parent")!!.string("full_name").toString() != "LCTT/TranslateProject") {
             logger.error("Repository ${config.repoName} is not a fork of LCTT/TranslateProject.")
             logger.info("Please check your repository name configuration or fork the LCTT/TranslateProject.")
             exitProcess(1)
+        } else {
+            logger.trace("Repository ${config.repoName} is a fork of LCTT/TranslateProject.")
         }
+
+        logger.info("Repository configuration verified.")
     }
 }
