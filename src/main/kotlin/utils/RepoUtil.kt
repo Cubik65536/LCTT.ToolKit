@@ -14,7 +14,7 @@ class RepoUtil (private val config: GitHubConfig) {
     fun syncUpstream() {
         logger.info("Syncing upstream...")
 
-        val url = "${GITHUB_API_URL}/repos/${config.githubID}/${config.repoName}/erge-upstream"
+        val url = "${GITHUB_API_URL}/repos/${config.githubID}/${config.repoName}/merge-upstream"
         val response = HttpUtil.PostRequests.request(url) {
             accept(ContentType("application", "vnd.github+json"))
             bearerAuth(config.githubToken)
@@ -34,7 +34,9 @@ class RepoUtil (private val config: GitHubConfig) {
         when (response.status.value) {
             200 -> logger.info("Successfully synced with the upstream repository.")
             409 -> logger.error("Could not be sync with upstream repository because of a merge conflict.")
-            else -> logger.error("Could not be sync with upstream repository for unknown reason.")
+            else -> {
+                logger.error("Could not be sync with upstream repository for unknown reason. (status code: ${response.status.value})")
+            }
         }
     }
 
