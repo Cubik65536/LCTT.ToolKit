@@ -20,7 +20,7 @@ class GitHubEntity (private val config: GitHubConfig) {
     private fun getAuthUser(): String {
         val url = "${GITHUB_API_URL}/user"
 
-        val response = HttpUtil().GetRequests().getBodyJSON(url) {
+        val response = HttpUtil.GetRequests.getBodyJSON(url) {
             accept(ContentType("application", "vnd.github+json"))
             bearerAuth(config.githubToken)
             headers {
@@ -36,7 +36,7 @@ class GitHubEntity (private val config: GitHubConfig) {
     }
 
     private fun getOwnFork(url: String): List<JsonObject> {
-        val response = HttpUtil().GetRequests().getBody(url) {
+        val response = HttpUtil.GetRequests.getBody(url) {
             accept(ContentType("application", "vnd.github+json"))
             bearerAuth(config.githubToken)
             headers {
@@ -66,7 +66,7 @@ class GitHubEntity (private val config: GitHubConfig) {
 
         logger.info("Creating fork of ${upstream.name}...")
 
-        val response = HttpUtil().PostRequests().request(url) {
+        val response = HttpUtil.PostRequests.request(url) {
             accept(ContentType("application", "vnd.github+json"))
             bearerAuth(config.githubToken)
             headers {
@@ -97,7 +97,7 @@ class GitHubEntity (private val config: GitHubConfig) {
     fun checkRepo(upstream: UpstreamConfig): Boolean {
         val url = "${GITHUB_API_URL}/repos/${config.githubID}/${config.repoName}"
 
-        val response = HttpUtil().GetRequests().getBodyJSON(url) {
+        val response = HttpUtil.GetRequests.getBodyJSON(url) {
             accept(ContentType("application", "vnd.github+json"))
             bearerAuth(config.githubToken)
             headers {

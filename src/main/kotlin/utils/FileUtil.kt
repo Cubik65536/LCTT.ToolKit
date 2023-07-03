@@ -9,7 +9,7 @@ import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import java.io.File
 
-class FileUtil {
+object FileUtil {
     private val logger = LoggerFactory.getLogger(javaClass)
 
     fun downloadFile(

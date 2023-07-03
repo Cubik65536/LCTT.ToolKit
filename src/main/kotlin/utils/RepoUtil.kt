@@ -8,7 +8,7 @@ class RepoUtil (private val config: GitHubConfig) {
     fun downloadArchive() {
         val url = "https://github.com/${config.githubID}/${config.repoName}/zipball/master"
         val path = "tmp/${config.repoName}.zip"
-        FileUtil().downloadFile(url, path) {
+        FileUtil.downloadFile(url, path) {
             accept(ContentType("application", "vnd.github+json"))
             bearerAuth(config.githubToken)
             headers {

@@ -10,7 +10,7 @@ import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import java.net.http.HttpClient
 
-class HttpUtil {
+object HttpUtil {
     private val logger = LoggerFactory.getLogger(javaClass)
 
     private val httpClient = HttpClient(Java) {
@@ -22,7 +22,7 @@ class HttpUtil {
         }
     }
 
-    inner class GetRequests {
+    object GetRequests {
         fun request(url: String, requestBuilder: HttpRequestBuilder.() -> Unit = {}): HttpResponse {
             logger.debug("GET $url")
             val httpResponse: HttpResponse
@@ -48,7 +48,7 @@ class HttpUtil {
         }
     }
 
-    inner class PostRequests {
+    object PostRequests {
         fun request(url: String, requestBuilder: HttpRequestBuilder.() -> Unit = {}): HttpResponse {
             logger.debug("POST $url")
             val httpResponse: HttpResponse
