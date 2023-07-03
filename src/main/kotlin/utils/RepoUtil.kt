@@ -35,7 +35,10 @@ class RepoUtil (private val config: GitHubConfig) {
             200 -> logger.info("Successfully synced with the upstream repository.")
             409 -> logger.error("Could not be sync with upstream repository because of a merge conflict.")
             else -> {
-                logger.error("Could not be sync with upstream repository for unknown reason. (status code: ${response.status.value})")
+                logger.error(
+                    "Could not be sync with upstream repository for unknown reason." +
+                    " (status code: ${response.status.value})"
+                )
             }
         }
     }
