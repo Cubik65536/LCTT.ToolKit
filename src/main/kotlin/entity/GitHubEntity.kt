@@ -126,7 +126,6 @@ class GitHubEntity (private val config: GitHubConfig) {
             logger.trace("Repository ${config.repoName} is a fork of ${upstream.name}.")
         }
 
-        logger.info("Repository configuration verified.")
         return true
     }
 }

@@ -29,6 +29,7 @@ class Init: CliktCommand(name = "init", help = "Initialize the LCTT ToolKit") {
         if (!gitHubEntity.checkRepo(config.upstream)) {
             gitHubEntity.createFork(config.upstream)
         }
+        logger.info("Repository configuration verified.")
     }
 }
 
