@@ -13,7 +13,13 @@ import java.io.File
 class FileUtil {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    fun downloadFile(urlString: String, pathname: String, downloadDescription: String) {
+    fun downloadFile(
+        urlString: String,
+        pathname: String,
+        requestBuilder: HttpRequestBuilder.() -> Unit = {}
+    ) {
+        logger.info("Downloading $urlString to $pathname")
+
         val httpClient = HttpClient(Java) {
             engine {
                 // this: JavaHttpConfig
@@ -26,11 +32,7 @@ class FileUtil {
         val file = File(pathname)
 
         runBlocking {
-            val httpResponse: HttpResponse = httpClient.get(urlString) {
-                onDownload { bytesSentTotal, contentLength ->
-                    logger.info("$downloadDescription: $bytesSentTotal/$contentLength")
-                }
-            }
+            val httpResponse: HttpResponse = httpClient.get(urlString, requestBuilder)
             val responseBody: ByteArray = httpResponse.body()
             if (!file.parentFile.exists()) {
                 file.parentFile.mkdirs()
