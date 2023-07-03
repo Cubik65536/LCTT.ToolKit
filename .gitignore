@@ -83,3 +83,6 @@ conf/
 
 # Log files
 *.log
+
+# Temporary files
+tmp/
