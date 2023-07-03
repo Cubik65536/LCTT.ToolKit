@@ -3,6 +3,7 @@ import com.github.ajalt.clikt.core.subcommands
 import entity.ConfigEntity
 import entity.GitHubEntity
 import org.slf4j.LoggerFactory
+import utils.RepoUtil
 import kotlin.system.exitProcess
 
 class LCTTToolKit: CliktCommand() {
@@ -29,6 +30,7 @@ class Init: CliktCommand(name = "init", help = "Initialize the LCTT ToolKit") {
         if (!gitHubEntity.checkRepo(config.upstream)) {
             gitHubEntity.createFork(config.upstream)
         }
+        RepoUtil(config.github).unzipArchive()
         logger.info("Repository configuration verified.")
     }
 }

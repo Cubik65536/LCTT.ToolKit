@@ -16,4 +16,11 @@ class RepoUtil (private val config: GitHubConfig) {
             }
         }
     }
+
+    fun unzipArchive() {
+        downloadArchive()
+        val path = "tmp/${config.repoName}.zip"
+        val dest = "tmp/${config.repoName}"
+        FileUtil.unzip(path, dest)
+    }
 }

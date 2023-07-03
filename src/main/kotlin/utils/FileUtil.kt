@@ -29,14 +29,14 @@ object FileUtil {
         bos.close()
     }
 
-    fun unzip(zipFilePath: File, destDirectory: String) {
+    fun unzip(zipFilePath: String, destDirectory: String) {
         File(destDirectory).run {
             if (!exists()) {
                 mkdirs()
             }
         }
 
-        ZipFile(zipFilePath).use { zip ->
+        ZipFile(File(zipFilePath)).use { zip ->
             zip.entries().asSequence().forEach { entry ->
                 zip.getInputStream(entry).use { input ->
                     val filePath = destDirectory + File.separator + entry.name
