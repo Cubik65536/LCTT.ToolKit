@@ -1,7 +1,6 @@
 package utils
 
 import config.GitHubConfig
-import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 
