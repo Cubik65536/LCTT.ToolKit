@@ -2,7 +2,9 @@ package utils
 
 import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Parser
+import entity.ConfigEntity
 import io.ktor.client.*
+import io.ktor.client.engine.*
 import io.ktor.client.engine.java.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -18,6 +20,9 @@ object HttpUtil {
             // this: JavaHttpConfig
             threadsCount = 8
             pipelining = true
+            if (ConfigEntity().loadConfig().proxy.enabled) {
+                proxy = ProxyBuilder.http(ConfigEntity().loadConfig().proxy.address)
+            }
             protocolVersion = HttpClient.Version.HTTP_2
         }
     }
