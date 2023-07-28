@@ -30,7 +30,12 @@ class Init: CliktCommand(name = "init", help = "Initialize the LCTT ToolKit") {
         if (!gitHubEntity.checkRepo(config.upstream)) {
             gitHubEntity.createFork(config.upstream)
         }
-        RepoUtil(config.github).unzipArchive()
+        logger.info("Verifying repository configuration... This may take a while.")
+        val repoUtil = RepoUtil(config.github)
+        repoUtil.syncUpstream()
+        repoUtil.downloadArchive()
+        repoUtil.unzipArchive()
+        repoUtil.checkArchive()
         logger.info("Repository configuration verified.")
     }
 }

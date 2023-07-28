@@ -21,7 +21,9 @@ object HttpUtil {
             threadsCount = 8
             pipelining = true
             if (ConfigEntity().loadConfig().proxy.enabled) {
-                proxy = ProxyBuilder.http(ConfigEntity().loadConfig().proxy.address)
+                val address = ConfigEntity().loadConfig().proxy.address
+                logger.info("Using proxy: $address")
+                proxy = ProxyBuilder.http(address)
             }
             protocolVersion = HttpClient.Version.HTTP_2
         }

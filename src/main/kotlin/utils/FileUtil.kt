@@ -78,4 +78,15 @@ object FileUtil {
             file.writeBytes(responseBody)
         }
     }
+
+    fun getAllFilesInDirectory(directory: String): List<File> {
+        val dir = File(directory)
+        val files = mutableListOf<File>()
+        dir.walk().forEach {
+            if (it.isFile) {
+                files.add(it)
+            }
+        }
+        return files
+    }
 }
